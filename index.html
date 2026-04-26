@@ -16,20 +16,26 @@
         }
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-dark); color: #f1f5f9; scroll-behavior: smooth; }
         .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .sidebar { height: 100vh; width: 260px; position: fixed; left: 0; top: 0; overflow-y: auto; border-right: 1px solid rgba(255, 255, 255, 0.1); padding: 1.5rem 1rem; z-index: 50; }
-        .main-content { margin-left: 260px; padding: 2rem; }
+        
+        /* Sidebar: Oculta en móvil, fija en escritorio */
+        .sidebar { width: 260px; position: fixed; height: 100vh; left: 0; top: 0; overflow-y: auto; border-right: 1px solid rgba(255, 255, 255, 0.1); padding: 1.5rem 1rem; z-index: 50; display: none; }
+        @media (min-width: 1024px) { .sidebar { display: block; } }
+
+        /* Contenido: Ajuste de márgenes según pantalla */
+        .main-content { padding: 1rem; }
+        @media (min-width: 1024px) { .main-content { margin-left: 260px; padding: 2rem; } }
+
         .chart-container { position: relative; height: 180px; width: 100%; margin-bottom: 10px; }
         .nav-link { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 10px; color: #94a3b8; transition: all 0.3s; margin-bottom: 2px; font-size: 0.9rem; }
-        .nav-link:hover, .nav-link.active { background: rgba(99, 102, 241, 0.1); color: #818cf8; }
+        .nav-link:hover { background: rgba(99, 102, 241, 0.1); color: #818cf8; }
         .legend-dot { width: 10px; height: 10px; border-radius: 2px; display: inline-block; margin-right: 6px; }
-        .status-pill { font-size: 0.7rem; padding: 2px 8px; border-radius: 99px; font-weight: bold; text-transform: uppercase; }
-        .trend-up { color: #4ade80; } .trend-down { color: #f87171; }
     </style>
 </head>
 <body>
 
+    <!-- SIDEBAR (Escritorio) -->
     <aside class="sidebar glass">
-        <div class="mb-8 px-4 text-center">
+        <div class="mb-8 px-4">
             <h1 class="text-xl font-extrabold tracking-tighter">IES MH <span class="text-indigo-400">2ª EVAL</span></h1>
         </div>
         <nav>
@@ -47,124 +53,119 @@
     </aside>
 
     <main class="main-content">
-        <header class="mb-10 flex justify-between items-start">
+        <header class="mb-8 flex flex-col md:flex-row justify-between items-start gap-4">
             <div>
-                <h2 class="text-3xl font-bold">Análisis de resultados MH 2025-26</h2>
-                <p class="text-slate-400">Análisis comparativo y estadístico por grupos</p>
+                <h2 class="text-2xl md:text-3xl font-bold">Análisis de resultados 2025-26</h2>
+                <p class="text-slate-400 text-sm">IES Miguel Hernández - 2ª Evaluación</p>
             </div>
-            <div class="flex gap-4">
-                <div class="glass p-3 rounded-xl text-center min-w-[100px]">
-                    <span class="block text-[10px] text-slate-400 uppercase">Total Alumnos</span>
-                    <span class="text-xl font-bold">~1060</span>
-                </div>
+            <div class="glass p-3 rounded-xl text-center min-w-[120px] w-full md:w-auto">
+                <span class="block text-[10px] text-slate-400 uppercase">Alumnado Total</span>
+                <span class="text-xl font-bold">~1060</span>
             </div>
         </header>
 
-        <!-- LEYENDA FLOTANTE -->
-        <div class="flex flex-wrap gap-6 mb-8 p-4 glass rounded-2xl justify-center sticky top-4 z-40">
-            <div class="flex items-center text-xs"><span class="legend-dot bg-blue-500"></span> 0 Susp.</div>
-            <div class="flex items-center text-xs"><span class="legend-dot bg-orange-500"></span> 1-2 Susp.</div>
-            <div class="flex items-center text-xs"><span class="legend-dot bg-slate-400"></span> 3-4 Susp.</div>
-            <div class="flex items-center text-xs"><span class="legend-dot bg-yellow-500"></span> 5+ Susp.</div>
+        <!-- LEYENDA (Pegajosa en móvil y escritorio) -->
+        <div class="flex flex-wrap gap-4 md:gap-6 mb-8 p-4 glass rounded-2xl justify-center sticky top-4 z-40">
+            <div class="flex items-center text-[10px] md:text-xs"><span class="legend-dot bg-blue-500"></span> 0 Susp.</div>
+            <div class="flex items-center text-[10px] md:text-xs"><span class="legend-dot bg-orange-500"></span> 1-2 Susp.</div>
+            <div class="flex items-center text-[10px] md:text-xs"><span class="legend-dot bg-slate-400"></span> 3-4 Susp.</div>
+            <div class="flex items-center text-[10px] md:text-xs"><span class="legend-dot bg-yellow-500"></span> 5+ Susp.</div>
         </div>
 
-        <!-- 1º ESO -->
-        <section id="eso1" class="mb-16">
-            <div class="mb-6">
-                <h3 class="text-2xl font-bold">1º ESO <span class="text-slate-500 font-normal text-lg ml-2">(177 alumnos)</span></h3>
-                <p class="text-sm text-indigo-300 mt-1 italic">Mejoría notable en grupos B y C (bilingües mixtos).</p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="eso1-grid"></div>
-        </section>
-
-        <!-- 2º ESO -->
-        <section id="eso2" class="mb-16">
-            <div class="mb-6">
-                <h3 class="text-2xl font-bold">2º ESO <span class="text-slate-500 font-normal text-lg ml-2">(174 alumnos)</span></h3>
-                <p class="text-sm text-indigo-300 mt-1 italic">Grupos B y D presentan el mejor estado de promoción.</p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="eso2-grid"></div>
-        </section>
-
-        <!-- 3º ESO -->
-        <section id="eso3" class="mb-16">
-            <div class="mb-6">
-                <h3 class="text-2xl font-bold">3º ESO <span class="text-slate-500 font-normal text-lg ml-2">(258 alumnos)</span></h3>
-                <p class="text-sm text-indigo-300 mt-1 italic">Divergencia extrema: Éxito en Bilingüe vs. Riesgo alto en grupos ordinarios.</p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="eso3-grid"></div>
-        </section>
-
-        <!-- 4º ESO -->
-        <section id="eso4" class="mb-16">
-            <div class="mb-6">
-                <h3 class="text-2xl font-bold">4º ESO <span class="text-slate-500 font-normal text-lg ml-2">(223 alumnos)</span></h3>
-                <p class="text-sm text-indigo-300 mt-1 italic">4º A lidera los resultados; 4º F con 40% de nulo rendimiento.</p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="eso4-grid"></div>
-        </section>
-
-        <!-- BACHILLERATO -->
-        <section id="bach" class="mb-16">
-            <h3 class="text-2xl font-bold mb-6">Bachillerato <span class="text-slate-500 font-normal text-lg ml-2">(106 alumnos en 1º / 117 en 2º)</span></h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="glass p-6 rounded-3xl">
-                    <h4 class="text-indigo-400 font-bold mb-4">1º Bachillerato</h4>
-                    <div class="grid grid-cols-2 gap-4" id="bach1-grid"></div>
+        <!-- SECCIONES -->
+        <div class="space-y-16">
+            <!-- 1º ESO -->
+            <section id="eso1">
+                <div class="mb-6">
+                    <h3 class="text-2xl font-bold">1º ESO <span class="text-slate-500 font-normal text-lg ml-2">(177 alumnos)</span></h3>
+                    <p class="text-sm text-indigo-300 mt-1 italic">Mejoría notable en grupos B y C (bilingües mixtos).</p>
                 </div>
-                <div class="glass p-6 rounded-3xl">
-                    <h4 class="text-emerald-400 font-bold mb-4">2º Bachillerato</h4>
-                    <div class="grid grid-cols-2 gap-4" id="bach2-grid"></div>
-                </div>
-            </div>
-        </section>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="eso1-grid"></div>
+            </section>
 
-        <!-- CICLOS FORMATIVOS -->
-        <section id="ciclos" class="mb-16">
-            <h3 class="text-2xl font-bold mb-6">Ciclos Formativos</h3>
-            <div id="ciclos-container" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
-        </section>
-
-        <!-- ATENCIÓN A LA DIVERSIDAD -->
-        <section id="diversidad" class="mb-16">
-            <h3 class="text-2xl font-bold mb-6 text-amber-400">Atención a la Diversidad</h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="glass p-6 rounded-3xl border-l-4 border-amber-500">
-                    <h4 class="font-bold mb-3">Población NEE/NEAE</h4>
-                    <ul class="text-sm space-y-2 text-slate-300">
-                        <li><span class="text-amber-500 font-bold">1º ESO:</span> 4 ACNEEs (1 TEA, 1 TL, 2 Psíquica) + 9 ACNEAEs.</li>
-                        <li><span class="text-amber-500 font-bold">2º ESO:</span> 2 ACNEEs + 10 ACNEAEs.</li>
-                        <li><span class="text-amber-500 font-bold">3º ESO:</span> 10 ACNEEs (7 TEA) + 8 ACNEAEs.</li>
-                        <li><span class="text-amber-500 font-bold">4º ESO:</span> 9 ACNEEs + 4 ACNEAEs.</li>
-                    </ul>
+            <!-- 2º ESO -->
+            <section id="eso2">
+                <div class="mb-6">
+                    <h3 class="text-2xl font-bold">2º ESO <span class="text-slate-500 font-normal text-lg ml-2">(174 alumnos)</span></h3>
+                    <p class="text-sm text-indigo-300 mt-1 italic">Grupos B y D presentan el mejor estado de promoción.</p>
                 </div>
-                <div class="glass p-6 rounded-3xl border-l-4 border-indigo-500">
-                    <h4 class="font-bold mb-3">Incorporación Tardía</h4>
-                    <p class="text-sm text-slate-300">Total acumulado relevante:</p>
-                    <div class="mt-2 grid grid-cols-2 gap-2 text-center">
-                        <div class="bg-indigo-500/10 p-2 rounded">1º ESO: 11</div>
-                        <div class="bg-indigo-500/10 p-2 rounded">2º ESO: 19</div>
-                        <div class="bg-indigo-500/10 p-2 rounded">3º ESO: 16</div>
-                        <div class="bg-indigo-500/10 p-2 rounded">4º ESO: 25</div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="eso2-grid"></div>
+            </section>
+
+            <!-- 3º ESO -->
+            <section id="eso3">
+                <div class="mb-6">
+                    <h3 class="text-2xl font-bold">3º ESO <span class="text-slate-500 font-normal text-lg ml-2">(258 alumnos)</span></h3>
+                    <p class="text-sm text-indigo-300 mt-1 italic">Divergencia extrema: Éxito en Bilingüe vs. Riesgo alto en ordinarios.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="eso3-grid"></div>
+            </section>
+
+            <!-- 4º ESO -->
+            <section id="eso4">
+                <div class="mb-6">
+                    <h3 class="text-2xl font-bold">4º ESO <span class="text-slate-500 font-normal text-lg ml-2">(223 alumnos)</span></h3>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="eso4-grid"></div>
+            </section>
+
+            <!-- BACHILLERATO -->
+            <section id="bach">
+                <h3 class="text-2xl font-bold mb-6">Bachillerato</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="glass p-6 rounded-3xl">
+                        <h4 class="text-indigo-400 font-bold mb-4 uppercase text-xs tracking-widest">1º Bachillerato</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="bach1-grid"></div>
+                    </div>
+                    <div class="glass p-6 rounded-3xl">
+                        <h4 class="text-emerald-400 font-bold mb-4 uppercase text-xs tracking-widest">2º Bachillerato</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="bach2-grid"></div>
                     </div>
                 </div>
-                <div class="glass p-6 rounded-3xl border-l-4 border-emerald-500">
-                    <h4 class="font-bold mb-3">Reflexión Pedagógica</h4>
-                    <p class="text-[13px] text-slate-300 leading-relaxed italic">
-                        "Se observa una correlación directa entre los grupos bilingües/DIVER y el éxito académico. Los grupos ordinarios con alta concentración de incorporación tardía y ACNEEs presentan resultados más críticos, requiriendo refuerzo en medidas de inclusión."
-                    </p>
+            </section>
+
+            <!-- CICLOS -->
+            <section id="ciclos">
+                <h3 class="text-2xl font-bold mb-6">Ciclos Formativos</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="ciclos-grid"></div>
+            </section>
+
+            <!-- DIVERSIDAD -->
+            <section id="diversidad" class="pb-20">
+                <h3 class="text-2xl font-bold mb-6 text-amber-400">Atención a la Diversidad</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="glass p-6 rounded-3xl border-l-4 border-amber-500">
+                        <h4 class="font-bold mb-3">Población NEE/NEAE</h4>
+                        <ul class="text-sm space-y-2 text-slate-300">
+                            <li><span class="text-amber-500 font-bold">1º ESO:</span> 4 ACNEEs + 9 ACNEAEs.</li>
+                            <li><span class="text-amber-500 font-bold">2º ESO:</span> 2 ACNEEs + 10 ACNEAEs.</li>
+                            <li><span class="text-amber-500 font-bold">3º ESO:</span> 10 ACNEEs (7 TEA) + 8 ACNEAEs.</li>
+                            <li><span class="text-amber-500 font-bold">4º ESO:</span> 9 ACNEEs + 4 ACNEAEs.</li>
+                        </ul>
+                    </div>
+                    <div class="glass p-6 rounded-3xl border-l-4 border-indigo-500">
+                        <h4 class="font-bold mb-3">Incorporación Tardía</h4>
+                        <div class="grid grid-cols-2 gap-2 text-center text-xs">
+                            <div class="bg-indigo-500/10 p-2 rounded">1º ESO: 11</div>
+                            <div class="bg-indigo-500/10 p-2 rounded">2º ESO: 19</div>
+                            <div class="bg-indigo-500/10 p-2 rounded">3º ESO: 16</div>
+                            <div class="bg-indigo-500/10 p-2 rounded">4º ESO: 25</div>
+                        </div>
+                    </div>
+                    <div class="glass p-6 rounded-3xl border-l-4 border-emerald-500 italic text-[13px] text-slate-300">
+                        "Se observa correlación exitosa en grupos bilingües y DIVER. Los grupos ordinarios con alta tasa de incorporación tardía requieren refuerzo inclusivo."
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        </div>
     </main>
 
     <script>
         Chart.register(ChartDataLabels);
 
-        const createChartConfig = (label, data) => ({
+        const createConfig = (data) => ({
             type: 'doughnut',
             data: {
-                labels: ['0', '1-2', '3-4', '5+'],
                 datasets: [{
                     data: data,
                     backgroundColor: ['#3b82f6', '#f97316', '#94a3b8', '#eab308'],
@@ -186,73 +187,48 @@
             }
         });
 
-        const renderGroup = (id, title, data, trend = '', containerId) => {
+        const renderGroup = (containerId, id, title, data, trend = '') => {
             const container = document.getElementById(containerId);
             const card = document.createElement('div');
             card.className = 'glass p-5 rounded-3xl text-center';
             card.innerHTML = `
                 <div class="flex justify-between items-center mb-4 px-2">
-                    <span class="text-xs font-bold text-slate-400">${title}</span>
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">${title}</span>
                     ${trend === 'up' ? '<i class="fas fa-arrow-up text-emerald-400 text-xs"></i>' : (trend === 'down' ? '<i class="fas fa-arrow-down text-red-400 text-xs"></i>' : '')}
                 </div>
                 <div class="chart-container"><canvas id="chart-${id}"></canvas></div>
             `;
             container.appendChild(card);
-            new Chart(document.getElementById(`chart-${id}`), createChartConfig(title, data));
+            new Chart(document.getElementById(`chart-${id}`), createConfig(data));
         };
 
-        // --- 1º ESO ---
-        const eso1Data = [
-            { id: '1a', t: '1º ESO A', d: [21, 32, 12, 35], tr: 'up' },
-            { id: '1b', t: '1º ESO B', d: [40, 25, 14, 21], tr: 'down' },
-            { id: '1c', t: '1º ESO C', d: [48, 28, 7, 17], tr: 'up' },
-            { id: '1d', t: '1º ESO D', d: [30, 20, 20, 30] },
-            { id: '1e', t: '1º ESO E', d: [25, 27, 24, 24], tr: 'up' },
-            { id: '1f', t: '1º ESO F', d: [15, 32, 13, 40] }
-        ];
-        eso1Data.forEach(g => renderGroup(g.id, g.t, g.d, g.tr, 'eso1-grid'));
+        // --- CARGA DE DATOS ---
+        
+        // 1º ESO
+        const e1 = [['1a','1º ESO A',[21,32,12,35],'up'],['1b','1º ESO B',[40,25,14,21],'down'],['1c','1º ESO C',[48,28,7,17],'up'],['1d','1º ESO D',[30,20,20,30]],['1e','1º ESO E',[25,27,24,24],'up'],['1f','1º ESO F',[15,32,13,40]]];
+        e1.forEach(g => renderGroup('eso1-grid', ...g));
 
-        // --- 2º ESO ---
-        const eso2Data = [
-            { id: '2a', t: '2º ESO A', d: [20, 20, 15, 45], tr: 'up' },
-            { id: '2b', t: '2º ESO B', d: [35, 22, 10, 33], tr: 'up' },
-            { id: '2c', t: '2º ESO C', d: [18, 20, 15, 47], tr: 'up' },
-            { id: '2d', t: '2º ESO D', d: [40, 28, 12, 20], tr: 'up' },
-            { id: '2e', t: '2º ESO E', d: [12, 12, 14, 62], tr: 'up' },
-            { id: '2f', t: '2º ESO F', d: [13, 12, 18, 57], tr: 'up' }
-        ];
-        eso2Data.forEach(g => renderGroup(g.id, g.t, g.d, g.tr, 'eso2-grid'));
+        // 2º ESO
+        const e2 = [['2a','2º ESO A',[20,20,15,45]],['2b','2º ESO B',[35,22,10,33],'up'],['2c','2º ESO C',[18,20,15,47]],['2d','2º ESO D',[40,28,12,20],'up'],['2e','2º ESO E',[12,12,14,62]],['2f','2º ESO F',[13,12,18,57]]];
+        e2.forEach(g => renderGroup('eso2-grid', ...g));
 
-        // --- 3º ESO ---
-        const eso3Data = [
-            { id: '3bil', t: 'Bilingües (Prom)', d: [45, 20, 15, 20] },
-            { id: '3ord', t: 'Ordinarios (Prom)', d: [15, 15, 20, 50] },
-            { id: '3di1', t: 'DIVER I', d: [50, 40, 10, 0], tr: 'down' },
-            { id: '3di2', t: 'DIVER II', d: [18, 32, 20, 30], tr: 'down' }
-        ];
-        eso3Data.forEach(g => renderGroup(g.id, g.t, g.d, g.tr, 'eso3-grid'));
+        // 3º ESO
+        const e3 = [['3bil','Bilingüe',[45,20,15,20]],['3ord','Ordinario',[15,15,20,50]],['3di1','DIVER I',[50,40,10,0],'down'],['3di2','DIVER II',[18,32,20,30]]];
+        e3.forEach(g => renderGroup('eso3-grid', ...g));
 
-        // --- 4º ESO ---
-        const eso4Data = [
-            { id: '4a', t: '4º ESO A (Cienc)', d: [42, 28, 10, 20] },
-            { id: '4f', t: '4º ESO F (Ciclos)', d: [12, 27, 21, 40], tr: 'up' },
-            { id: '4di2', t: 'DIVER II (4º)', d: [65, 25, 10, 0] }
-        ];
-        eso4Data.forEach(g => renderGroup(g.id, g.t, g.d, g.tr, 'eso4-grid'));
+        // 4º ESO
+        const e4 = [['4a','4º ESO A',[42,28,10,20],'up'],['4f','4º ESO F',[12,27,21,40]],['4di2','DIVER II',[65,25,10,0],'up']];
+        e4.forEach(g => renderGroup('eso4-grid', ...g));
 
-        // --- BACHILLERATO (Ejemplos por el texto) ---
-        renderGroup('b1ct', '1º BCT', [31, 40, 15, 14], '', 'bach1-grid');
-        renderGroup('b1ima', '1º IMADIS', [60, 20, 10, 10], '', 'bach1-grid');
-        renderGroup('b2ct', '2º BCT', [62, 20, 10, 8], 'up', 'bach2-grid');
-        renderGroup('b2bcs', '2º BCS', [44, 30, 10, 16], 'down', 'bach2-grid');
+        // Bachillerato
+        renderGroup('bach1-grid', 'b1ct', '1º BCT', [31,40,15,14]);
+        renderGroup('bach1-grid', 'b1ima', '1º IMADIS', [60,20,10,10]);
+        renderGroup('bach2-grid', 'b2ct', '2º BCT', [62,20,10,8], 'up');
+        renderGroup('bach2-grid', 'b2bcs', '2º BCS', [44,30,10,16], 'down');
 
-        // --- CICLOS ---
-        const ciclosData = [
-            { id: 'gb1a', t: '1º GB Admin', d: [18, 41, 10, 31], tr: 'down' },
-            { id: 'gm1ga', t: '1º GM Gestión', d: [39, 25, 15, 21], tr: 'up' },
-            { id: 'gs1af', t: '1º GS Finanzas', d: [85, 11, 0, 4] }
-        ];
-        ciclosData.forEach(g => renderGroup(g.id, g.t, g.d, g.tr, 'ciclos-container'));
+        // Ciclos
+        const cic = [['gb1a','1º GB Admin',[18,41,10,31],'down'],['gm1ga','1º GM Gest',[39,25,15,21],'up'],['gs1af','1º GS Finan',[85,11,0,4],'up']];
+        cic.forEach(g => renderGroup('ciclos-grid', ...g));
 
     </script>
 </body>
